@@ -1,0 +1,130 @@
+.App-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh; 
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #f5f553;
+}
+
+.Login-box, .Main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px;
+    background-color: #fff; 
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+
+.Title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+
+.Button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+
+.Submit-button, .Login-box .Button {
+    background-color: #007bff;
+    color: white;
+}
+
+.Submit-button:hover, .Login-box .Button:hover {
+    background-color: #0056b3;
+}
+
+
+.Back-button {
+    background-color: #6c757d; 
+    color: white;
+}
+
+.Back-button:hover {
+    background-color: #5a6268;
+}
+
+
+.Meetup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    width: 100%;
+}
+
+
+.Input-field {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+textarea.Input-field {
+    resize: vertical;
+}
+
+.Input-field:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.List-content {
+    max-width: 600px; 
+    height: 90vh; 
+    padding: 30px;
+}
+
+
+.Meetings-list-wrapper {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    overflow-y: auto; 
+    max-height: calc(90vh - 180px);
+    border-top: 1px solid #ddd; 
+}
+
+
+.Meeting-item {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.Meeting-item h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #fcf008; 
+    margin-bottom: 10px;
+}
+
+.Meeting-item p {
+    margin: 5px 0;
+    color: #555;
+}
+
