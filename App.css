@@ -1,3 +1,24 @@
+.main-page-container {
+    position: relative; 
+}
+
+.user-status {
+    position: absolute;
+    top: 20px;       
+    right: 20px;     
+    background-color: #e0f7fa; 
+    color: #004d40;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10; 
+}
+
+.user-status p {
+    margin: 0;
+}
+
 .App-container {
     display: flex;
     justify-content: center;
@@ -11,7 +32,7 @@
     background-color: #f5f553;
 }
 
-.Login-box, .Main-content {
+.main-box, .Main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,13 +63,20 @@
     transition: background-color 0.3s ease;
 }
 
+.Logout-button {
+    background-color: #dc3545; /* Red color for sign out */
+    color: white;
+}
 
-.Submit-button, .Login-box .Button {
+.Logout-button:hover {
+    background-color: #c82333;
+}
+.Submit-button, .main-box .Button {
     background-color: #007bff;
     color: white;
 }
 
-.Submit-button:hover, .Login-box .Button:hover {
+.Submit-button:hover, .main-box .Button:hover {
     background-color: #0056b3;
 }
 
