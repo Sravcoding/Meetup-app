@@ -1,22 +1,13 @@
 // Meetup source code
 
-import { useState, useEffect } from "react"; //Calling React hooks
-import { initializeApp } from 'firebase/app'; //Firebase imports
-import { getDatabase} from 'firebase/database';
-import {getAuth,signOut} from 'firebase/auth';
+import { useState} from "react"; //Calling React hooks
 
 //Import local files
 import './App.css'; 
-import config from './config';
-import UserModule from './user'; const { useAuthstatus, Login, Signup } = UserModule;
+import {auth} from './firebase'
+import UserModule from './user'; const { useAuthstatus, Login, Signup, UserProfile } = UserModule;
 import DatabaseModule from './database'; const {writeUserData,MeetingsList} = DatabaseModule;
-
-//initializing firebase and setting up db and auth
-const app = initializeApp(config);
-export const db = getDatabase(app); 
-export const auth=getAuth(app);
-
-
+import {signOut} from 'firebase/auth';
 
 //main fucntion
 function App() {
@@ -24,15 +15,26 @@ function App() {
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
   const [location, setlocation] = useState("");
-  const {isLoggedin, currentUser}=useAuthstatus();
+  const {isLoggedin, currentUser, isLoading}=useAuthstatus();
 
   const handleSubmit = (e) => {
     e.preventDefault(); 
-    writeUserData(title, description, location);
-    settitle('');
-    setdescription('');
-    setlocation('');
+    if (currentUser) {
+      writeUserData(
+        title, 
+        description, 
+        location,
+        currentUser.uid,          
+      );
+      settitle('');
+      setdescription('');
+      setlocation('');
+
+    } else {
+      alert("Error: You must be logged in to create a meeting.");
+    }
   };
+
 
   const handleSignOut = async () => {
       try {
@@ -43,7 +45,19 @@ function App() {
           console.error("Sign out error:", error);
           alert("Failed to sign out. Please try again.");
       }
-};
+  };
+
+
+  if (isLoading) { // Check loading state first
+    return (
+      <div className="App-container">
+        <div className="main-box">
+          <h1 className="Title">Loading...</h1>
+          <p>Checking login status...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (page === "main") {
     return (
@@ -52,13 +66,14 @@ function App() {
         {isLoggedin && currentUser && (
             <div className="user-status">
                 <p>Logged in as: <strong>{currentUser.email}</strong></p>
-                <button 
-                  className="Button Logout-button" 
-                  type="button" 
-                  onClick={handleSignOut}
-                >
+                <button className="Button Logout-button" type="button" onClick={handleSignOut}>
                   Sign Out
                 </button>
+
+                <button className="Button" type="button" onClick={() => setPage("user_profile")}style={{ marginLeft: '10px' }}>
+                  My Profile
+                </button>
+
             </div>
         )}
 
@@ -97,7 +112,8 @@ function App() {
     return (
       <div className="App-container">
         <div className="Main-content">
-          <h1 className="Title">Create a New Meetup</h1>       
+          <h1 className="Title">Create a New Meetup</h1>    
+
           <form className="Meetup-form" onSubmit={handleSubmit}>
             <input 
               className="Input-field"
@@ -143,6 +159,8 @@ function App() {
     return <Signup setPage={setPage} />;
   }else if(page === 'login'){
     return <Login setPage={setPage} />;
+  }else if(page === 'user_profile'){
+    return <UserProfile setPage={setPage} />;
   }
 
 }

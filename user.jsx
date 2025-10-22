@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { auth } from './App';
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
+import { auth } from './firebase';
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile} from 'firebase/auth';
 
 function Signup({ setPage }) { 
   const [email, setEmail] = useState('');
@@ -18,6 +18,13 @@ function Signup({ setPage }) {
           email,
           password
         );
+        
+        //REMOVE THIS AND REPLACE WITH GOOGLE SIGN IN
+        await updateProfile(userCredential.user, { 
+            displayName: "Jane Doe", 
+            photoURL: "https://example.com/jane-q-user/profile.jpg"
+        });
+
         console.log('User signed up:', userCredential.user);
         setPage("list_of_meetings");
       }else{
@@ -78,7 +85,6 @@ function Login({ setPage }) {
         email,
         password
       );
-      // Logged in successfully, navigate back to the main page
       console.log('User logged in!');
       setPage("main"); 
     } catch (err) {
@@ -126,6 +132,7 @@ const useAuthstatus = () => {
   
   const [isLoggedin, setisLoggedin] = useState(false);
   const [currentUser, setCurrentUser] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -136,12 +143,66 @@ const useAuthstatus = () => {
         setisLoggedin(false)
         setCurrentUser(null) 
       }
+      setIsLoading(false); 
     });
 
     return () => unsubscribe();
   }, []);
 
-  return {isLoggedin, currentUser}; 
+  return {isLoggedin, currentUser, isLoading}; 
 }
 
-export default {useAuthstatus,Login,Signup};
+function UserProfile({ setPage }) {
+  const { isLoggedin,currentUser, isLoading} = useAuthstatus(); 
+
+  if (isLoading) {
+    return (
+      <div className="App-container">
+        <div className="Main-content Profile-content">
+          <h1 className="Title">Loading Profile...</h1>
+          <p>Verifying user...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoggedin) {
+    setPage("main")
+    return null;
+  }
+
+  return (
+    <div className="App-container">
+      <div className="Main-content Profile-content">
+        <h1 className="Title">My Profile 👤</h1>
+        
+        
+        <div className="Profile-details">
+          {currentUser.photoURL ? (
+            <img src={currentUser.photoURL} alt="User Profile" className="Profile-photo" />
+          ) : (
+            <div className="Profile-photo-placeholder">
+              {currentUser.email ? currentUser.email[0].toUpperCase() : 'U'}
+            </div>
+          )}
+          
+          <p>
+            <strong>Name:</strong> 
+            {currentUser.displayName || 'Not Set (Defaulting to Email)'}
+          </p>
+          
+          <p><strong>Email:</strong> {currentUser.email || 'N/A'}</p>
+          
+        </div>
+        
+
+        <button className="Button Back-button" onClick={() => setPage("main")}>
+          &larr; Go Back
+        </button>
+      </div>
+    </div>
+  );
+
+}
+
+export default { useAuthstatus, Login, Signup, UserProfile };

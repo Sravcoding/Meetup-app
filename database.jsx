@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import { db } from './App';
+import {auth, db } from './firebase';
 import { ref, set, push, onValue} from 'firebase/database';
 
 
 
-function writeUserData(Title, Description, Location) {
+function writeUserData(Title, Description, Location, userId) {
   const meetref = ref(db, "Meetings"); 
   const pushref = push(meetref);
   set(pushref, {
     title: Title,
     description: Description,
-    location: Location
+    location: Location,
+    authorId: userId,  
   });
 }
 
-//Custom hook to read data. Needs hook so we can use hooks inside it cause of react rule
 const useMeetingsData = () => {
     const [meetings, setMeetings] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -39,14 +39,14 @@ const useMeetingsData = () => {
         });
 
         return () => unsubscribe();
-    }, []);//Note empty dependency array
+    }, []);
 
     return { meetings, isLoading };
 }
 
 const MeetingsList = ({ setPage }) => {
     const { meetings, isLoading } = useMeetingsData();
-
+ 
     return (
         <div className="App-container">
             <div className="Main-content List-content">
@@ -63,6 +63,7 @@ const MeetingsList = ({ setPage }) => {
                                 <h3>{meeting.title}</h3>
                                 <p><strong>📍 Location:</strong> {meeting.location}</p>
                                 <p>{meeting.description}</p>
+                                <p>{meeting.authorId}</p>
                             </div>
                         ))
                     )}
