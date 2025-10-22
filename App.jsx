@@ -13,6 +13,8 @@ import {signOut} from 'firebase/auth';
 function App() {
   const [page, setPage] = useState("main");
   const [title, settitle] = useState("");
+  const [date, setdate] = useState("");
+  const [time, settime] = useState("00:00");
   const [description, setdescription] = useState("");
   const [location, setlocation] = useState("");
   const {isLoggedin, currentUser, isLoading}=useAuthstatus();
@@ -127,7 +129,7 @@ function App() {
             <textarea 
               className="Input-field"
               placeholder="Enter Description" 
-              rows="7"
+              rows="5"
               type="text" 
               value={description} 
               onChange={(e) => setdescription(e.target.value)}
@@ -140,6 +142,24 @@ function App() {
               type="text" 
               value={location} 
               onChange={(e) => setlocation(e.target.value)}
+              required
+            />
+
+            <input 
+              className="Input-field"
+              placeholder="Enter Date" 
+              type="date" 
+              value={date} 
+              onChange={(e) => setdate(e.target.value)}
+              required
+            />
+
+            <input 
+              className="Input-field"
+              placeholder="Enter Time" 
+              type="time" 
+              value={time} 
+              onChange={(e) => settime(e.target.value)}
               required
             />
 

@@ -109,7 +109,7 @@
 }
 
 textarea.Input-field {
-    resize: vertical;
+    resize: none;
 }
 
 .Input-field:focus {

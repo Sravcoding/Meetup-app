@@ -4,7 +4,7 @@ import { ref, set, push, onValue} from 'firebase/database';
 
 
 
-function writeUserData(Title, Description, Location, userId) {
+function writeUserData(Title, Description, Location, userId, date) {
   const meetref = ref(db, "Meetings"); 
   const pushref = push(meetref);
   set(pushref, {
@@ -12,6 +12,7 @@ function writeUserData(Title, Description, Location, userId) {
     description: Description,
     location: Location,
     authorId: userId,  
+    date: date
   });
 }
 
